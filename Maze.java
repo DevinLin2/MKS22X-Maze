@@ -12,7 +12,6 @@ public class Maze{
       Maze maze = new Maze("Maze1.txt");
       maze.setAnimate(true);
       System.out.println(maze.solve());
-      System.out.println(maze);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -102,12 +101,14 @@ public class Maze{
       System.out.println(this);
       wait(50);
     }
-    if (maze[row][col] == 'E') {
-      return solveSpaces;
-    }
+    if (maze[row][col] == 'E') return solveSpaces;
+    maze[row][col] = '@';
     for (int i = 0; i < moves.length; i += 2) {
-
+      if (maze[row + moves[i]][col + moves[i + 1]] != '#' && maze[row + moves[i]][col + moves[i + 1]] != '.' && maze[row + moves[i]][col + moves[i + 1]] != '@') {
+        solve(row + moves[i], col + moves[i + 1], solveSpaces++);
+      }
     }
+    maze[row][col] = '.';
     return -1;
   }
   public String toString() {
