@@ -11,7 +11,7 @@ public class Maze{
 
   public static void main(String[] args) {
     try {
-      Maze maze = new Maze("Maze1.txt");
+      Maze maze = new Maze(args[0]);
       maze.setAnimate(true);
       System.out.println(maze.solve());
     } catch (FileNotFoundException e) {
@@ -104,7 +104,7 @@ public class Maze{
       clearTerminal();
       System.out.println(this);
       //debug();
-      wait(10);
+      wait(50);
     }
     if (maze[row][col] == 'E') {
       return counter;
