@@ -10,6 +10,9 @@ public class Maze{
   public static void main(String[] args) {
     try {
       Maze maze = new Maze("Maze1.txt");
+      maze.setAnimate(true);
+      System.out.println(maze.solve());
+      System.out.println(maze);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -26,21 +29,29 @@ public class Maze{
   */
   public Maze(String filename) throws FileNotFoundException{
     File text = new File(filename);
-    //inf stands for the input file
     Scanner inf = new Scanner(text);
     String m = "";
     int row = 0;
     int col = 0;
+    int totalChars = 0;
+    int index = 0;
     while(inf.hasNextLine()){
       String line = inf.nextLine();
+      row++;
       m += line;
     }
     for (int i = 0; i < m.length(); i++) {
-      if (m.substring(i,i+1).equals("\n")) {
-        row++;
+      totalChars++;
+    }
+    col = totalChars / row;
+    maze = new char[row][col];
+    for (int r = 0; r < maze.length; r++) {
+      for (int c = 0; c < maze[0].length; c++) {
+        maze[r][c] = m.charAt(index);
+        index++;
       }
-    }// add to col and divide by row+1
-  }
+    }
+  } //  needs to throw this CHECK THE ABOVE MENTIONED
 
   private void wait(int millis){
     try {
@@ -61,11 +72,18 @@ public class Maze{
   Since the constructor exits when the file is not found or is missing an E or S, we can assume it exists.
   */
   public int solve(){
-    //find the location of the S.
-    //erase the S
-    //and start solving at the location of the s.
-    //return solve(???,???);
-    return 0;
+    int row = 0;
+    int col = 0;
+    for (int r = 0; r < maze.length; r++) {
+      for (int c = 0; c < maze[0].length; c++) {
+        if (maze[r][c] == 'S') {
+          row = r;
+          col = c;
+        }
+      }
+    }
+    maze[row][col] = ' ';
+    return solve(row, col, 0);
   }
   /*
   Recursive Solve function:
@@ -77,15 +95,20 @@ public class Maze{
   All visited spots that were not part of the solution are changed to '.'
   All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col){ //you can add more parameters since this is private
-    //automatic animation! You are welcome.
+  private int solve(int row, int col, int solveSpaces){ //you can add more parameters since this is private
+    int[] moves = new int[] {-1, 0, 1, 0, 0, -1, 0, 1};
     if(animate){
       clearTerminal();
       System.out.println(this);
-      wait(20);
+      wait(50);
     }
-    //COMPLETE SOLVE
-    return -1; //so it compiles
+    if (maze[row][col] == 'E') {
+      return solveSpaces;
+    }
+    for (int i = 0; i < moves.length; i += 2) {
+
+    }
+    return -1;
   }
   public String toString() {
     String ans = "";
