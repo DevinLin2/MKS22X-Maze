@@ -7,12 +7,13 @@ public class Maze{
 
   private boolean animate;//false by default
 
+  private int counter;
+
   public static void main(String[] args) {
     try {
       Maze maze = new Maze("Maze1.txt");
       maze.setAnimate(true);
       System.out.println(maze.solve());
-      System.out.println(maze);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -35,6 +36,7 @@ public class Maze{
     int col = 0;
     int totalChars = 0;
     int index = 0;
+    counter = 0;
     while(inf.hasNextLine()){
       String line = inf.nextLine();
       row++;
@@ -102,19 +104,21 @@ public class Maze{
       clearTerminal();
       System.out.println(this);
       //debug();
-      wait(50);
+      wait(10);
     }
     if (maze[row][col] == 'E') {
-      return 1;
+      return counter;
     }
     maze[row][col] = '@';
+    counter++;
     for (int i = 0; i < moves.length; i += 2) {
       if (maze[row + moves[i]][col + moves[i + 1]] != '#' && maze[row + moves[i]][col + moves[i + 1]] != '.' && maze[row + moves[i]][col + moves[i + 1]] != '@' &&
       solve(row + moves[i], col + moves[i + 1]) != -1) {
-        return 1;
+        return counter;
       }
     }
     maze[row][col] = '.';
+    counter--;
     return -1;
   }
   public void debug() {
