@@ -14,6 +14,7 @@ public class Maze{
       Maze maze = new Maze(args[0]);
       maze.setAnimate(true);
       System.out.println(maze.solve());
+      System.out.println(maze);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -37,6 +38,9 @@ public class Maze{
     int totalChars = 0;
     int index = 0;
     counter = 0;
+    animate = false;
+    int eCount = 0;
+    int sCount = 0;
     while(inf.hasNextLine()){
       String line = inf.nextLine();
       row++;
@@ -50,10 +54,15 @@ public class Maze{
     for (int r = 0; r < maze.length; r++) {
       for (int c = 0; c < maze[0].length; c++) {
         maze[r][c] = m.charAt(index);
+        if (maze[r][c] == 'S') sCount++;
+        if (maze[r][c] == 'E') eCount++;
         index++;
       }
     }
-  } //  needs to throw this CHECK THE ABOVE MENTIONED
+    if (eCount != 1 || sCount != 1) {
+      throw new IllegalStateException("Board does not contain exactly one start and one exit");
+    }
+  }
 
   private void wait(int millis){
     try {
