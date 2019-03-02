@@ -12,6 +12,7 @@ public class Maze{
       Maze maze = new Maze("Maze1.txt");
       maze.setAnimate(true);
       System.out.println(maze.solve());
+      System.out.println(maze);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
@@ -73,6 +74,7 @@ public class Maze{
   public int solve(){
     int row = 0;
     int col = 0;
+    int moves = 0;
     for (int r = 0; r < maze.length; r++) {
       for (int c = 0; c < maze[0].length; c++) {
         if (maze[r][c] == 'S') {
@@ -82,7 +84,7 @@ public class Maze{
       }
     }
     maze[row][col] = ' ';
-    return solve(row, col, 0);
+    return solve(row, col);
   }
   /*
   Recursive Solve function:
@@ -94,22 +96,40 @@ public class Maze{
   All visited spots that were not part of the solution are changed to '.'
   All visited spots that are part of the solution are changed to '@'
   */
-  private int solve(int row, int col, int solveSpaces){ //you can add more parameters since this is private
+  private int solve(int row, int col){ //you can add more parameters since this is private
     int[] moves = new int[] {-1, 0, 1, 0, 0, -1, 0, 1};
     if(animate){
       clearTerminal();
       System.out.println(this);
+      //debug();
       wait(50);
     }
-    if (maze[row][col] == 'E') return solveSpaces;
+    if (maze[row][col] == 'E') {
+      return 1;
+    }
     maze[row][col] = '@';
     for (int i = 0; i < moves.length; i += 2) {
-      if (maze[row + moves[i]][col + moves[i + 1]] != '#' && maze[row + moves[i]][col + moves[i + 1]] != '.' && maze[row + moves[i]][col + moves[i + 1]] != '@') {
-        solve(row + moves[i], col + moves[i + 1], solveSpaces++);
+      if (maze[row + moves[i]][col + moves[i + 1]] != '#' && maze[row + moves[i]][col + moves[i + 1]] != '.' && maze[row + moves[i]][col + moves[i + 1]] != '@' &&
+      solve(row + moves[i], col + moves[i + 1]) != -1) {
+        return 1;
       }
     }
     maze[row][col] = '.';
     return -1;
+  }
+  public void debug() {
+    String ans = "";
+    for (int r = 0; r < maze.length; r++) {
+      for (int c = 0; c < maze[0].length; c++) {
+        if (maze[r][c] == '#') {
+          ans += '|';
+        } else {
+          ans += maze[r][c];
+        }
+      }
+      ans += "\n";
+    }
+    System.out.println(ans);
   }
   public String toString() {
     String ans = "";
